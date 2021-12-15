@@ -95,11 +95,11 @@ $(PROTOC_GEN_MICRO): $(BINGO_DIR)/protoc-gen-micro.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-micro-v3.0.0-20211012122208-f63e46a7d1e9"
 	@cd $(BINGO_DIR) && $(GO) build -mod=mod -modfile=protoc-gen-micro.mod -o=$(GOBIN)/protoc-gen-micro-v3.0.0-20211012122208-f63e46a7d1e9 "github.com/asim/go-micro/cmd/protoc-gen-micro/v3"
 
-PROTOC_GEN_MICROWEB := $(GOBIN)/protoc-gen-microweb-v0.0.0-20210824101557-828409dbfbf9
+PROTOC_GEN_MICROWEB := $(GOBIN)/protoc-gen-microweb-v0.0.0-20211213100857-59d9b3c63824
 $(PROTOC_GEN_MICROWEB): $(BINGO_DIR)/protoc-gen-microweb.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-microweb-v0.0.0-20210824101557-828409dbfbf9"
-	@cd $(BINGO_DIR) && $(GO) build -mod=mod -modfile=protoc-gen-microweb.mod -o=$(GOBIN)/protoc-gen-microweb-v0.0.0-20210824101557-828409dbfbf9 "github.com/owncloud/protoc-gen-microweb"
+	@echo "(re)installing $(GOBIN)/protoc-gen-microweb-v0.0.0-20211213100857-59d9b3c63824"
+	@cd $(BINGO_DIR) && $(GO) build -mod=mod -modfile=protoc-gen-microweb.mod -o=$(GOBIN)/protoc-gen-microweb-v0.0.0-20211213100857-59d9b3c63824 "github.com/owncloud/protoc-gen-microweb"
 
 PROTOC_GEN_OPENAPIV2 := $(GOBIN)/protoc-gen-openapiv2-v2.6.0
 $(PROTOC_GEN_OPENAPIV2): $(BINGO_DIR)/protoc-gen-openapiv2.mod
