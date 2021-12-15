@@ -6,6 +6,8 @@ import (
 	"path"
 	"path/filepath"
 
+	accountsmsg "github.com/owncloud/ocis/protogen/gen/ocis/messages/accounts/v1"
+
 	"github.com/cs3org/reva/pkg/auth/scope"
 
 	user "github.com/cs3org/go-cs3apis/cs3/identity/user/v1beta1"
@@ -16,7 +18,6 @@ import (
 	"github.com/cs3org/reva/pkg/token"
 	"github.com/cs3org/reva/pkg/token/manager/jwt"
 	"github.com/owncloud/ocis/accounts/pkg/config"
-	"github.com/owncloud/ocis/accounts/pkg/proto/v0"
 	olog "github.com/owncloud/ocis/ocis-pkg/log"
 	metadatastorage "github.com/owncloud/ocis/ocis-pkg/metadata_storage"
 	"google.golang.org/grpc/metadata"
@@ -63,7 +64,7 @@ func NewCS3Repo(cfg *config.Config) (Repo, error) {
 }
 
 // WriteAccount writes an account via cs3 and modifies the provided account (e.g. with a generated id).
-func (r CS3Repo) WriteAccount(ctx context.Context, a *proto.Account) (err error) {
+func (r CS3Repo) WriteAccount(ctx context.Context, a *accountsmsg.Account) (err error) {
 	ctx, err = r.getAuthenticatedContext(ctx)
 	if err != nil {
 		return err
@@ -84,7 +85,7 @@ func (r CS3Repo) WriteAccount(ctx context.Context, a *proto.Account) (err error)
 }
 
 // LoadAccount loads an account via cs3 by id and writes it to the provided account
-func (r CS3Repo) LoadAccount(ctx context.Context, id string, a *proto.Account) (err error) {
+func (r CS3Repo) LoadAccount(ctx context.Context, id string, a *accountsmsg.Account) (err error) {
 	ctx, err = r.getAuthenticatedContext(ctx)
 	if err != nil {
 		return err
@@ -94,7 +95,7 @@ func (r CS3Repo) LoadAccount(ctx context.Context, id string, a *proto.Account) (
 }
 
 // LoadAccounts loads all the accounts from the cs3 api
-func (r CS3Repo) LoadAccounts(ctx context.Context, a *[]*proto.Account) (err error) {
+func (r CS3Repo) LoadAccounts(ctx context.Context, a *[]*accountsmsg.Account) (err error) {
 	ctx, err = r.getAuthenticatedContext(ctx)
 	if err != nil {
 		return err
@@ -111,7 +112,7 @@ func (r CS3Repo) LoadAccounts(ctx context.Context, a *[]*proto.Account) (err err
 
 	log := olog.NewLogger(olog.Pretty(r.cfg.Log.Pretty), olog.Color(r.cfg.Log.Color), olog.Level(r.cfg.Log.Level))
 	for i := range res.Infos {
-		acc := &proto.Account{}
+		acc := &accountsmsg.Account{}
 		err := r.loadAccount(ctx, filepath.Base(res.Infos[i].Path), acc)
 		if err != nil {
 			log.Err(err).Msg("could not load account")
@@ -122,7 +123,7 @@ func (r CS3Repo) LoadAccounts(ctx context.Context, a *[]*proto.Account) (err err
 	return nil
 }
 
-func (r CS3Repo) loadAccount(ctx context.Context, id string, a *proto.Account) error {
+func (r CS3Repo) loadAccount(ctx context.Context, id string, a *accountsmsg.Account) error {
 	account, err := r.metadataStorage.SimpleDownload(ctx, r.accountURL(id))
 	if err != nil {
 		if metadatastorage.IsNotFoundErr(err) {
@@ -159,7 +160,7 @@ func (r CS3Repo) DeleteAccount(ctx context.Context, id string) (err error) {
 }
 
 // WriteGroup writes a group via cs3 and modifies the provided group (e.g. with a generated id).
-func (r CS3Repo) WriteGroup(ctx context.Context, g *proto.Group) (err error) {
+func (r CS3Repo) WriteGroup(ctx context.Context, g *accountsmsg.Group) (err error) {
 	ctx, err = r.getAuthenticatedContext(ctx)
 	if err != nil {
 		return err
@@ -179,7 +180,7 @@ func (r CS3Repo) WriteGroup(ctx context.Context, g *proto.Group) (err error) {
 }
 
 // LoadGroup loads a group via cs3 by id and writes it to the provided group
-func (r CS3Repo) LoadGroup(ctx context.Context, id string, g *proto.Group) (err error) {
+func (r CS3Repo) LoadGroup(ctx context.Context, id string, g *accountsmsg.Group) (err error) {
 	ctx, err = r.getAuthenticatedContext(ctx)
 	if err != nil {
 		return err
@@ -189,7 +190,7 @@ func (r CS3Repo) LoadGroup(ctx context.Context, id string, g *proto.Group) (err 
 }
 
 // LoadGroups loads all the groups from the cs3 api
-func (r CS3Repo) LoadGroups(ctx context.Context, g *[]*proto.Group) (err error) {
+func (r CS3Repo) LoadGroups(ctx context.Context, g *[]*accountsmsg.Group) (err error) {
 	ctx, err = r.getAuthenticatedContext(ctx)
 	if err != nil {
 		return err
@@ -206,7 +207,7 @@ func (r CS3Repo) LoadGroups(ctx context.Context, g *[]*proto.Group) (err error) 
 
 	log := olog.NewLogger(olog.Pretty(r.cfg.Log.Pretty), olog.Color(r.cfg.Log.Color), olog.Level(r.cfg.Log.Level))
 	for i := range res.Infos {
-		grp := &proto.Group{}
+		grp := &accountsmsg.Group{}
 		err := r.loadGroup(ctx, filepath.Base(res.Infos[i].Path), grp)
 		if err != nil {
 			log.Err(err).Msg("could not load account")
@@ -217,7 +218,7 @@ func (r CS3Repo) LoadGroups(ctx context.Context, g *[]*proto.Group) (err error) 
 	return nil
 }
 
-func (r CS3Repo) loadGroup(ctx context.Context, id string, g *proto.Group) error {
+func (r CS3Repo) loadGroup(ctx context.Context, id string, g *accountsmsg.Group) error {
 	group, err := r.metadataStorage.SimpleDownload(ctx, r.groupURL(id))
 	if err != nil {
 		if metadatastorage.IsNotFoundErr(err) {

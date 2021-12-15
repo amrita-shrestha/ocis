@@ -9,9 +9,11 @@ import (
 	"testing"
 	"time"
 
+	accountsmsg "github.com/owncloud/ocis/protogen/gen/ocis/messages/accounts/v1"
+	accountssvc "github.com/owncloud/ocis/protogen/gen/ocis/services/accounts/v1"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/owncloud/ocis/accounts/pkg/config"
-	"github.com/owncloud/ocis/accounts/pkg/proto/v0"
 	olog "github.com/owncloud/ocis/ocis-pkg/log"
 	"github.com/owncloud/ocis/ocis-pkg/middleware"
 	"github.com/owncloud/ocis/ocis-pkg/roles"
@@ -99,10 +101,10 @@ func TestPermissionsListAccounts(t *testing.T) {
 			defer teardown()
 
 			ctx := buildTestCtx(t, scenario.roleIDs)
-			request := &proto.ListAccountsRequest{
+			request := &accountssvc.ListAccountsRequest{
 				Query: scenario.query,
 			}
-			response := &proto.ListAccountsResponse{}
+			response := &accountssvc.ListAccountsResponse{}
 			err := s.ListAccounts(ctx, request, response)
 			if scenario.permissionError != nil {
 				assert.Equal(t, scenario.permissionError, err)
@@ -146,8 +148,8 @@ func TestPermissionsGetAccount(t *testing.T) {
 			defer teardown()
 
 			ctx := buildTestCtx(t, scenario.roleIDs)
-			request := &proto.GetAccountRequest{}
-			response := &proto.Account{}
+			request := &accountssvc.GetAccountRequest{}
+			response := &accountsmsg.Account{}
 			err := s.GetAccount(ctx, request, response)
 			if scenario.permissionError != nil {
 				assert.Equal(t, scenario.permissionError, err)
@@ -194,8 +196,8 @@ func TestPermissionsCreateAccount(t *testing.T) {
 			defer teardown()
 
 			ctx := buildTestCtx(t, scenario.roleIDs)
-			request := &proto.CreateAccountRequest{}
-			response := &proto.Account{}
+			request := &accountssvc.CreateAccountRequest{}
+			response := &accountsmsg.Account{}
 			err := s.CreateAccount(ctx, request, response)
 			if scenario.permissionError != nil {
 				assert.Equal(t, scenario.permissionError, err)
@@ -242,8 +244,8 @@ func TestPermissionsUpdateAccount(t *testing.T) {
 			defer teardown()
 
 			ctx := buildTestCtx(t, scenario.roleIDs)
-			request := &proto.UpdateAccountRequest{}
-			response := &proto.Account{}
+			request := &accountssvc.UpdateAccountRequest{}
+			response := &accountsmsg.Account{}
 			err := s.UpdateAccount(ctx, request, response)
 			if scenario.permissionError != nil {
 				assert.Equal(t, scenario.permissionError, err)
@@ -290,7 +292,7 @@ func TestPermissionsDeleteAccount(t *testing.T) {
 			defer teardown()
 
 			ctx := buildTestCtx(t, scenario.roleIDs)
-			request := &proto.DeleteAccountRequest{}
+			request := &accountssvc.DeleteAccountRequest{}
 			response := &empty.Empty{}
 			err := s.DeleteAccount(ctx, request, response)
 			if scenario.permissionError != nil {
